@@ -60,10 +60,11 @@ das margens, em fonte menor e espaço simples, separada do texto por um filete
 % O comando \figuraplaceholder (definido em tex/_placeholders.tex) apenas
 % desenha uma caixa cinza para o template compilar sem imagens externas.
 \begin{figure}[!htb]
+  \caption{Legenda da figura (acima da figura, conforme NBR 14724).}
+  \label{fig:exemplo}
   \centering
-  % Título e fonte alinhados à margem esquerda DA FIGURA (não do texto), NBR 14724 5.8.
-  \elementocomfonte[\caption{Legenda da figura (acima da figura, conforme NBR 14724).}\label{fig:exemplo}]%
-    {\figuraplaceholder{0.6\textwidth}{4cm}{imagens/sua-figura.png}}%
+  % A fonte fica alinhada à margem esquerda DA FIGURA (não do texto).
+  \elementocomfonte{\figuraplaceholder{0.6\textwidth}{4cm}{imagens/sua-figura.png}}%
     {Fonte: Elaborada pelo autor (\the\year{}).}
 \end{figure}
 

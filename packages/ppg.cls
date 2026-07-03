@@ -374,22 +374,18 @@
 % caixa com a largura do próprio elemento. Assim, com o conjunto centralizado
 % (\centering), a fonte fica alinhada à MARGEM ESQUERDA DO ELEMENTO, e não à
 % margem do texto (NBR 14724:2024, 5.8/5.9; guia UNIVALI, 5.7).
-% Uso (dentro de figure/table/quadro). A legenda entra no 1º argumento OPCIONAL,
-% para que o título TAMBÉM fique alinhado à borda esquerda do elemento (5.8):
+% Uso (dentro de figure/table/quadro, após \caption e \label):
 %   \centering
-%   \elementocomfonte[\caption{...}\label{...}]{<elemento>}{Fonte: ...}
-% Sem o argumento opcional, o comando funciona como antes (só elemento + fonte),
-% mantendo compatível qualquer \caption colocado fora.
-% Título e fonte usam \ABNTEXfontereduzida — MESMA fonte reduzida (uniforme),
-% "menor e uniforme" (NBR 14724:2024, 5.1). O título/legenda fica à esquerda por
-% causa de singlelinecheck=false/justification=raggedright na config de \caption.
+%   \elementocomfonte{<elemento: \includegraphics/tikzpicture/tabular>}{Fonte: ...}
+% A fonte usa \ABNTEXfontereduzida — a MESMA fonte reduzida do título/legenda
+% (\caption), para que título e fonte fiquem em tamanho "menor e uniforme"
+% (NBR 14724:2024, 5.1).
 \newsavebox{\ppgelembox}
-\newcommand{\elementocomfonte}[3][]{%
-  \sbox{\ppgelembox}{#2}%
+\newcommand{\elementocomfonte}[2]{%
+  \sbox{\ppgelembox}{#1}%
   \begin{minipage}{\wd\ppgelembox}%
-    \if\relax\detokenize{#1}\relax\else #1\fi
     \usebox{\ppgelembox}\par
-    \vspace{2pt}{\ABNTEXfontereduzida\raggedright #3\par}%
+    \vspace{2pt}{\ABNTEXfontereduzida\raggedright #2\par}%
   \end{minipage}%
 }
 
@@ -831,11 +827,7 @@
 \newfloat{quadro}{htbp}{loq}[chapter]
 \floatname{quadro}{\quadroname}
 \floatstyle{plaintop}
-% Versão estrelada: coopera com o pacote caption (não redefine \caption), para
-% que a legenda dentro da minipage do \elementocomfonte alinhe à borda do quadro
-% igual a figure/table (NBR 14724:2024, 5.8). \restylefloat sem * faria o float
-% tipografar o caption na largura total, jogando o título para a margem do texto.
-\restylefloat*{quadro}
+\restylefloat{quadro}
 \newlistof{listofquadros}{loq}{\listquadroname}
 \newlistentry{quadro}{loq}{0}
 \renewcommand{\thequadro}{\thechapter.\@arabic\c@quadro}
@@ -1049,7 +1041,7 @@
 \renewcommand{\ABNTEXfontereduzida}{\fontsize{10}{12}\selectfont} % Legendas e fontes em 10 pt exatos (NBR 14724:2024, 5.1 — "menor e uniforme")
 \DeclareCaptionFont{ABNTEXfontereduzida}{\ABNTEXfontereduzida}
 % Designativo ("Figura N –") em negrito; título e fonte em 10 pt redondo — mesmo tamanho (uniforme)
-\captionsetup{position=above, singlelinecheck=false, justification=raggedright, margin=0pt, labelfont={ABNTEXfontereduzida,bf}, font=ABNTEXfontereduzida}
+\captionsetup{position=above, labelfont={ABNTEXfontereduzida,bf}, font=ABNTEXfontereduzida}
 
 \DeclareCaptionFormat{listing}{\hrule height.8pt depth0pt #1#2#3}
 % Legenda de código-fonte uniforme com figuras/tabelas: tamanho reduzido,

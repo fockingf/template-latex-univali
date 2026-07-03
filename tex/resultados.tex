@@ -15,9 +15,11 @@ incididunt ut labore et dolore magna aliqua. Os resultados são apresentados na
 
 % --- EXEMPLO DE GRÁFICO (pgfplots, autocontido) ----------------------
 \begin{figure}[!htb]
+  \caption{Exemplo de gráfico de barras gerado com pgfplots.}
+  \label{fig:grafico}
   \centering
-  % Título e fonte alinhados à margem esquerda DO GRÁFICO (não do texto), NBR 14724 5.8.
-  \elementocomfonte[\caption{Exemplo de gráfico de barras gerado com pgfplots.}\label{fig:grafico}]{%
+  % A fonte fica alinhada à margem esquerda DO GRÁFICO (não do texto).
+  \elementocomfonte{%
   \begin{tikzpicture}
   \begin{axis}[
     ybar, width=0.85\textwidth, height=6cm,
