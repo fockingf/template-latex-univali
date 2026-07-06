@@ -1532,14 +1532,13 @@
   
   % Secção secundaria (Section) Caixa baixa, Negrito
   \renewcommand*{\cftsectionfont}{\bfseries}
-  % Secção terciaria (Subsection) Caixa baixa, italico (sem negrito) — Apendice
-  % D do guia UNIVALI: secao terciaria no sumario aparece em italico, nao em
-  % negrito. Destaque gradativo (NBR 6024): maiusc-negrito > negrito > italico.
-  \renewcommand*{\cftsubsectionfont}{\itshape}
-  % Secção quaternaria (Subsubsection) Caixa baixa, REDONDO (sem destaque) —
-  % a terciaria ja usa italico; manter a quaternaria tambem em italico faria os
-  % dois niveis colidirem. Destaque gradativo: ... > italico (1.1.1) > redondo.
-  \renewcommand*{\cftsubsubsectionfont}{\normalfont}
+  % Secção terciaria (Subsection) Caixa baixa, REDONDO (sem negrito) — pratica
+  % academica: secao terciaria em maiuscula/minuscula sem destaque de peso.
+  % Destaque gradativo (NBR 6024): maiusc-negrito > negrito > redondo > italico.
+  \renewcommand*{\cftsubsectionfont}{\normalfont}
+  % Secção quaternaria (Subsubsection) Caixa baixa, ITALICO — a terciaria usa
+  % redondo; a quaternaria em italico mantem os niveis distintos.
+  \renewcommand*{\cftsubsubsectionfont}{\itshape}
   % Secao quinquenaria (Subsubsubsection) Caixa baixa, redondo
   \renewcommand*{\cftparagraphfont}{\normalsize}
 
@@ -1564,10 +1563,10 @@
   
   % tamanhos de fontes de section, subsection, subsubsection e subsubsubsection
   \setsecheadstyle{\ABNTEXsectionfont\ABNTEXsectionfontsize\bfseries\ABNTEXsectionupperifneeded}
-  % Seção terciária em itálico SEM negrito (Apêndice D / NBR 6024 — destaque gradativo)
-  \setsubsecheadstyle{\ABNTEXsubsectionfont\ABNTEXsubsectionfontsize\itshape\ABNTEXsubsectionupperifneeded}
-  % Seção quaternária em REDONDO (sem itálico) para não colidir com a terciária
-  \setsubsubsecheadstyle{\ABNTEXsubsubsectionfont\ABNTEXsubsubsectionfontsize\ABNTEXsubsubsectionupperifneeded}
+  % Seção terciária em REDONDO SEM negrito (prática acadêmica — destaque gradativo)
+  \setsubsecheadstyle{\ABNTEXsubsectionfont\ABNTEXsubsectionfontsize\ABNTEXsubsectionupperifneeded}
+  % Seção quaternária em ITÁLICO para não colidir com a terciária (redonda)
+  \setsubsubsecheadstyle{\ABNTEXsubsubsectionfont\ABNTEXsubsubsectionfontsize\itshape\ABNTEXsubsubsectionupperifneeded}
   \setsubsubsubsecheadstyle{\ABNTEXsubsubsubsectionfont\ABNTEXsubsubsubsectionfontsize\ABNTEXsubsubsubsectionupperifneeded}
  
   % impressao do numero do capitulo
