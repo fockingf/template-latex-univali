@@ -166,6 +166,25 @@ os exemplos prontos em `tex/fundamentacao-teorica.tex`, `tex/resultados.tex` e
 `tex/materiais-e-metodos.tex`. Use `\figuraplaceholder{largura}{altura}{caminho}`
 como espaço reservado enquanto não tiver a imagem real.
 
+## Títulos de seção (destaque gradativo)
+
+Os níveis de seção são destacados **gradativamente** (NBR 6024), de forma **idêntica
+no texto e no sumário**. O tamanho **não** muda (tudo em 12 pt); só o peso/estilo:
+
+| Nível | Exemplo | Aparência |
+|-------|---------|-----------|
+| Primária (capítulo) | `1 INTRODUÇÃO`        | MAIÚSCULAS + negrito |
+| Secundária          | `1.1 Conceito`        | Negrito |
+| Terciária           | `1.1.1 Técnica`       | Redondo (sem negrito) |
+| Quaternária         | `1.1.1.1 Detalhe`     | *Itálico* |
+| Quinária            | `1.1.1.1.1 Item`      | Redondo |
+
+Esse esquema segue a **prática acadêmica** comum. O guia UNIVALI (Apêndice D) adota,
+alternativamente, **terciária em itálico** e **quaternária redonda** — também válido
+pela NBR 6024. Para trocar, ajuste **em par** (título ↔ sumário, para não quebrar a
+identidade exigida pela norma) em `packages/ppg.cls`: `\setsubsecheadstyle` com
+`\cftsubsectionfont`, e `\setsubsubsecheadstyle` com `\cftsubsubsectionfont`.
+
 ## Elementos opcionais
 
 O template vem com **todos os elementos habilitados, para demonstração**. No
