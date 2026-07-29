@@ -140,8 +140,10 @@ template/
 O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
 
 **Citações (NBR 10520:2023)** — em `tex/fundamentacao-teorica.tex`:
-- Indireta: `\parencite{}` → (SOBRENOME, ano); `\textcite{}` → Sobrenome (ano);
-  `\parencite[p. 12]{}` → com página
+- Indireta: `\parencite{}` → (Sobrenome, ano); `\textcite{}` → Sobrenome (ano);
+  `\parencite[p. 12]{}` → com página. Pela NBR 10520:2023, o sobrenome vem em
+  caixa baixa (só a inicial maiúscula) **também entre parênteses** — não mais em
+  caixa alta; o estilo biblatex-abnt do template já produz assim.
 - Direta **curta** (até 3 linhas): `\enquote{...}` — aspas curvas; **nunca** a aspa reta `"`
 - Direta **longa** (mais de 3 linhas): ambiente `citacao` (recuo 4 cm, fonte menor,
   espaço simples, sem aspas)
