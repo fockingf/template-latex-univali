@@ -49,6 +49,25 @@ Exemplos:
 \documentclass[doutorado,pos-defesa]{packages/ppg}
 ```
 
+### Paginação: frente única ou frente e verso
+
+Por padrão o template é **frente única (`oneside`)**: o número da página fica
+**sempre no canto superior direito**, a 2 cm da borda (NBR 14724:2024, 5.3) — ideal
+para entrega em PDF.
+
+Para **impressão frente e verso**, abra `packages/ppg.cls` e, na opção do
+`\LoadClass[...]{abntex2}` (por volta da linha 113), troque `oneside` por `twoside`.
+Isso é tratado automaticamente pela classe base:
+
+- **margens espelhadas** — 3 cm no lado interno (lombada) e 2 cm no externo,
+  alternando anverso/verso;
+- **numeração alternando o canto** — anverso à direita, verso à esquerda;
+- **páginas em branco** inseridas para os capítulos abrirem sempre em página ímpar.
+
+Nenhum outro ajuste é necessário; basta recompilar. A regra dos 3 cm da capa/folha
+de rosto, a ficha no verso da folha de rosto e os tamanhos de fonte permanecem
+conformes em ambos os modos.
+
 ### Curso / instituição
 
 A pós-graduação em Computação Aplicada da UNIVALI já vem pré-configurada via
