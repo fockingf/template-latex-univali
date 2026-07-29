@@ -68,6 +68,13 @@ Nenhum outro ajuste é necessário; basta recompilar. A regra dos 3 cm da capa/f
 de rosto, a ficha no verso da folha de rosto e os tamanhos de fonte permanecem
 conformes em ambos os modos.
 
+**Abertura de capítulo (NBR 14724:2024, 5.2.2).** Um capítulo é uma *seção primária*,
+e a norma pede: em **frente e verso**, ele deve começar em **página ímpar (anverso)**
+— inserindo uma página em branco quando necessário; em **frente única**, basta
+começar em **nova página**. A classe já faz isso automaticamente (opção `openright`):
+você não precisa de nenhum comando extra ao criar um capítulo — apenas
+`\chapter{...}` + `\input{tex/...}` no `thesis.tex`.
+
 ### Curso / instituição
 
 A pós-graduação em Computação Aplicada da UNIVALI já vem pré-configurada via
