@@ -110,8 +110,14 @@
 \LoadClass[% -- opções da classe memoir --
 	12pt,				% tamanho da fonte
 	openright,			% capítulos começam em pagina impar (insere pagina vazia caso preciso)
-	oneside,			% para impressão em verso e anverso trocar para twoside
-	a4paper,			% tamanho do papel. 
+	oneside,			% PAGINAÇÃO: somente frente (anverso). Numeração sempre no canto
+						% superior direito, a 2 cm da borda (NBR 14724:2024, 5.3).
+						% >>> Para IMPRESSÃO FRENTE E VERSO, troque 'oneside' por 'twoside':
+						%     as margens passam a ser espelhadas (3 cm no lado interno/lombada,
+						%     2 cm no externo) e a numeração alterna de canto automaticamente
+						%     (anverso à direita, verso à esquerda) — tudo herdado do abntex2.
+						%     Nada mais precisa ser alterado; basta recompilar (2-3 passes).
+	a4paper,			% tamanho do papel.
 	chapter=TITLE		% títulos de capítulos convertidos em letras maiusculas
 	]{abntex2}
 	
