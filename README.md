@@ -185,10 +185,14 @@ O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
   menção, a sigla vem entre parênteses precedida do nome completo) — demonstrado
   em `tex/fundamentacao-teorica.tex`. `\sigla*{}{}` só cadastra; `\sigla[A]{}{}`
   manda a entrada para o grupo *Abreviaturas* (o padrão é *Siglas*)
-- **Siglas clicáveis:** a chave da entrada é a própria sigla, então nas menções
-  seguintes escreva `\gls{IBGE}` — sai apenas "IBGE", com **link para a entrada na
-  lista**. Vale também para a primeira menção feita com `\sigla{}{}`. Sigla
-  digitada como texto puro aparece igual no PDF, mas sem link
+- **A regra das siglas: declare uma vez, depois sempre `\gls{}`.** Declare no
+  preâmbulo (`\nomenclature[S]{ABNT}{Associação...}`) ou na primeira menção
+  (`\sigla{IBGE}{Instituto...}`); a partir daí **toda** menção é `\gls{ABNT}` /
+  `\gls{IBGE}`. O pacote aplica a NBR 14724:2024, 5.6 sozinho: na primeira vez
+  imprime "nome completo (SIGLA)", nas seguintes só "SIGLA" — você não precisa
+  controlar qual é a primeira. Todas ficam **clicáveis**, levando à entrada na
+  lista. Sigla digitada como texto puro sai igual no PDF, mas sem link e sem
+  expandir. Demonstrado em `tex/fundamentacao-teorica.tex`
 - **Glossário** pós-textual (opcional, depois das Referências): defina os termos
   no preâmbulo com `\newword{termo}{definição}` (chaves automáticas `Def.1`,
   `Def.2`…) e cite-os no texto com `\gls{Def.1}` — ou use `\glsaddall` para

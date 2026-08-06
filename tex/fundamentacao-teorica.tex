@@ -2,28 +2,47 @@
 % FUNDAMENTAÇÃO TEÓRICA (Referencial Teórico)
 % Reúna os conceitos necessários para o leitor compreender o trabalho.
 % Este capítulo demonstra: citação (indireta, direta curta com \enquote, direta
-% longa com o ambiente citacao, grifo nosso, supressão [...] e apud), sigla na
-% primeira menção, nota de rodapé, figura, equação, alíneas (ABNT) e listas.
+% longa com o ambiente citacao, grifo nosso, supressão [...] e apud), uso correto
+% de siglas (declarar uma vez, depois \gls{}), nota de rodapé, figura, equação,
+% alíneas (ABNT) e listas.
 % =====================================================================
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua~\parencite{exemplo-livro}. Ut enim ad
 minim veniam, quis nostrud exercitation ullamco laboris.
 
-% SIGLA na PRIMEIRA menção (NBR 14724:2024, 5.6): "A sigla, quando mencionada
-% pela primeira vez no texto, deve ser indicada entre parênteses, precedida pelo
-% nome completo" — ex.: Associação Brasileira de Normas Técnicas (ABNT). O
-% \sigla{}{} faz as duas coisas de uma vez: escreve "nome completo (SIGLA)" aqui
-% e cadastra a entrada na lista de abreviaturas e siglas (pré-textual), sem
-% precisar repetir o \nomenclature no preâmbulo.
-% Nas menções SEGUINTES, use \gls{IBGE}: sai apenas "IBGE", e tanto ele quanto a
-% primeira menção ficam com link para a entrada na lista. Se você digitar a sigla
-% como texto puro, ela aparece igual no PDF, mas sem link.
-% Variações: \sigla*{}{} apenas cadastra (não escreve nada no texto) e
-% \sigla[A]{}{} manda a entrada para o grupo "Abreviaturas" em vez de "Siglas".
-Os dados populacionais utilizados nesta seção provêm do
-\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}. As séries
-históricas do \gls{IBGE} cobrem o período analisado.
+% =====================================================================
+% SIGLAS — A REGRA: DECLARE UMA VEZ, DEPOIS SEMPRE \gls{}
+% =====================================================================
+% NBR 14724:2024, 5.6: "A sigla, quando mencionada pela primeira vez no texto,
+% deve ser indicada entre parênteses, precedida pelo nome completo" — ex.:
+% Associação Brasileira de Normas Técnicas (ABNT). Nas menções seguintes, só a
+% sigla.
+%
+% 1) DECLARE a sigla uma única vez, de uma destas duas formas (escolha uma):
+%      a) no preâmbulo do thesis.tex:  \nomenclature[S]{ABNT}{Associação...}
+%      b) aqui, na primeira menção:    \sigla{IBGE}{Instituto Brasileiro...}
+%
+% 2) A PARTIR DAÍ, toda menção é \gls{ABNT} / \gls{IBGE} — inclusive a primeira,
+%    se você declarou pelo preâmbulo. O pacote cuida da regra 5.6 sozinho: na
+%    primeira vez que a sigla aparece no texto ele imprime "nome completo
+%    (SIGLA)"; da segunda em diante, apenas "SIGLA". Você NÃO precisa controlar
+%    qual menção é a primeira, nem escrever o nome completo à mão.
+%
+% 3) NÃO digite a sigla como texto puro. Ela sai igual no PDF, mas perde o link
+%    para a entrada na lista de abreviaturas e siglas — e, se for a primeira
+%    menção, não expande (a regra 5.6 fica por sua conta).
+%
+% A chave é a própria sigla, então \gls{IBGE} para a sigla IBGE. Variações:
+% \sigla*{}{} apenas cadastra, sem escrever nada no texto (útil para siglas que
+% só aparecem em figuras ou tabelas), e \sigla[A]{}{} manda a entrada para o
+% grupo "Abreviaturas" em vez de "Siglas".
+As normas de apresentação de trabalhos acadêmicos são publicadas pela
+\gls{ABNT} --- sigla declarada no preâmbulo, cuja primeira menção sai por
+extenso automaticamente. Já os dados populacionais provêm do
+\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}, declarado na
+própria linha em que é citado. Nas menções seguintes, ambas aparecem apenas
+como sigla: \gls{ABNT} e \gls{IBGE}, cada uma com link para a entrada na lista.
 
 %-------------------------------------------------------------
 \section{Primeiro conceito}
