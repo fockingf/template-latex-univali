@@ -14,6 +14,54 @@ Baseado em [abnTeX2](https://www.abntex.net.br/). O texto vem preenchido com
 > trabalhos acadêmicos** (guia da Biblioteca/PPG), disponível em
 > <https://portal.univali.br/biblioteca/normas-e-procedimentos#orientacoes>.
 
+## O que mudou — leia se você já usava o template
+
+**O problema que havia:** a **lista de abreviaturas e siglas nunca saía no PDF**.
+Quem cadastrava siglas com `\nomenclature` via a lista simplesmente não existir —
+sem erro, sem aviso, sem página. O passo de compilação que gerava a lista estava
+documentado errado, e a falha era silenciosa.
+
+**Está corrigido, e as siglas ganharam link.** Agora a sigla no texto é clicável e
+leva à entrada dela na lista, em todas as menções; e a primeira menção expande
+sozinha para "Associação Brasileira de Normas Técnicas (ABNT)", como exige a
+NBR 14724:2024, 5.6 — sem depender de você lembrar da regra. A lista também passou
+a separar **Abreviaturas** (`[A]`) de **Siglas** (`[S]`) com subtítulos.
+
+### A regra das siglas, em três passos
+
+1. **Declare a sigla uma vez** — no preâmbulo do `thesis.tex`
+   (`\nomenclature[S]{ABNT}{Associação Brasileira de Normas Técnicas}`) ou na
+   primeira menção, dentro do capítulo
+   (`\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}`).
+2. **No texto, escreva `\gls{ABNT}`** em vez de digitar a sigla. É o `\gls{}` que
+   gera o link e a expansão. **Esta é a única mudança de hábito.**
+3. **Não digite a sigla como texto puro.** Aparece igual no PDF, mas perde o link
+   e, se for a primeira menção, não expande.
+
+Não é preciso controlar qual menção é a primeira — o template resolve. Exemplo
+completo e comentado em `tex/fundamentacao-teorica.tex`.
+
+### Na compilação
+
+- **Local:** `latexmk thesis.tex` resolve tudo. À mão, o passo da lista é
+  `makeglossaries thesis` (veja "Compilação").
+- **Overleaf:** o projeto precisa ter o arquivo **`latexmkrc`** na raiz (vem deste
+  repositório), *Compiler* = **XeLaTeX** e, na primeira compilação depois de
+  atualizar, *Recompile* → **Clear cached files**.
+- **Sigla nova declarada com `\sigla` no meio do texto só entra na lista na segunda
+  compilação.** Se não apareceu de primeira, recompile.
+
+### O que NÃO mudou
+
+Nenhum trabalho em andamento precisa ser reescrito: `\nomenclature[A/S]{}{}`,
+`\sigla{}{}` e `\printnomenclature` continuam funcionando — só o mecanismo por
+baixo trocou. Quem não usar `\gls{}` mantém o texto como está, apenas sem os links.
+
+Duas notas menores: o **Glossário** (o do `\newword`, opcional e diferente da lista
+de siglas) passou para depois das Referências, onde a norma manda; e o rótulo da
+sigla virou chave interna, então use apenas letras, dígitos, ponto e hífen —
+evite `&`, `%`, `#`.
+
 ## Como começar
 
 1. **Escolha o tipo de trabalho** na primeira linha de `thesis.tex`, na opção do
@@ -25,7 +73,10 @@ Baseado em [abnTeX2](https://www.abntex.net.br/). O texto vem preenchido com
 4. **Cadastre as referências** em `referencias.bib` e cite com `\parencite{}` /
    `\textcite{}` (citação direta curta com `\enquote{}`; longa com o ambiente
    `citacao` — veja "Recursos demonstrados").
-5. **Compile** (veja "Compilação").
+5. **Cadastre as siglas** com `\nomenclature[S]{}{}` no `thesis.tex` (ou
+   `\sigla{}{}` na primeira menção) e cite-as no texto com `\gls{}`
+   — veja "A regra das siglas, em três passos".
+6. **Compile** (veja "Compilação").
 
 ## Tipos de trabalho (opções do `\documentclass`)
 
