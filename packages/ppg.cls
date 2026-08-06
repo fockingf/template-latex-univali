@@ -437,6 +437,18 @@
 % Traduz o titulo da lista de abreviaturas
 \renewcommand{\nomname}{\listadesiglasname}
 
+% Subtitulos dos grupos dentro da lista: \nomenclature[A]{} = abreviaturas,
+% \nomenclature[S]{} = siglas. Sem isso os prefixos A/S servem apenas como
+% chave de ordenacao e a lista sai numa sequencia corrida, sem separacao
+% visivel. Qualquer outro prefixo (ou nenhum) nao gera subtitulo.
+\newcommand{\@nomgroupsep}{}
+\renewcommand{\nomgroup}[1]{%
+  \ifstrequal{#1}{A}{\@nomgroupsep\item[\bfseries Abreviaturas]%
+                     \gdef\@nomgroupsep{\bigskip}}{%
+  \ifstrequal{#1}{S}{\@nomgroupsep\item[\bfseries Siglas]%
+                     \gdef\@nomgroupsep{\bigskip}}{}}%
+}
+
 % Comando para criação de abreviaturas e siglas
 \def\sigla{\@ifstar\@sigla\@@sigla}
 % Apenas faz o registro na tabela de siglas

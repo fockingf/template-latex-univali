@@ -208,9 +208,17 @@ method, main results, and conclusion.]
 \bookmarksetup{startatroot}
 \postextual
 
-% Lista de siglas/abreviaturas (glossário) e Referências
-\printglossary
+% Referências (obrigatórias) — NBR 6023:2025.
 \printbibliography[title={REFERÊNCIAS}]
+
+% Glossário — OPCIONAL e pós-textual, DEPOIS das Referências (NBR 14724:2024).
+% Não confundir com a lista de abreviaturas e siglas, que é pré-textual e vem
+% dos \nomenclature{} acima. Defina os termos no preâmbulo com
+% \newword{termo}{definição} — eles recebem as chaves Def.1, Def.2... na ordem —
+% e cite-os no texto com \gls{Def.1} (ou coloque \glsaddall após
+% \begin{document} para listar todos). Só entradas usadas são impressas: sem
+% nenhuma, esta linha não gera página alguma.
+\printglossary
 
 % ----------------------------------------------------------
 % APÊNDICES (produção do próprio autor) — OPCIONAL

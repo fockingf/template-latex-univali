@@ -95,25 +95,38 @@ Para mudar o cabeçalho impresso no topo da **capa**, use `\capainstituicao{...}
 
 **Pré-requisitos (build local):** uma distribuição TeX recente — **TeX Live**
 (Linux/macOS/Windows) ou **MiKTeX** (Windows) — que inclua `xelatex`, `biber`,
-`makeglossaries` e, opcionalmente, `latexmk`. Quem compila no **Overleaf** não
-precisa instalar nada (veja abaixo).
+`makeindex`, `makeglossaries` e, opcionalmente, `latexmk`. Quem compila no
+**Overleaf** não precisa instalar nada (veja abaixo).
 
 Use **XeLaTeX** ou **LuaLaTeX** (não pdfLaTeX — o template usa as fontes Arial e
 Times em `packages/fonts/` via `fontspec`). A bibliografia usa **biber**.
 
+**O jeito mais simples é `latexmk thesis.tex`**: o `.latexmkrc` do template já
+seleciona o XeLaTeX e executa biber, a lista de siglas e o glossário nas
+etapas certas.
+
+À mão, a sequência completa é:
+
 ```sh
 xelatex thesis
-biber thesis
-makeglossaries thesis   # gera a lista de siglas
+biber thesis                                    # referências
+makeindex -s nomencl.ist -o thesis.nls thesis.nlo   # lista de abreviaturas e siglas
+makeglossaries thesis                           # glossário (só se usar \newword)
 xelatex thesis
 xelatex thesis
 ```
 
-Ou, com latexmk: `latexmk -xelatex thesis.tex` (rode `makeglossaries thesis`
-manualmente se a lista de siglas ficar vazia).
+> **Atenção:** a lista de abreviaturas e siglas vem do pacote `nomencl` e é
+> gerada por **`makeindex` com o estilo `nomencl.ist`** — *não* por
+> `makeglossaries`, que cuida apenas do glossário pós-textual. Se essa etapa não
+> rodar, `\printnomenclature` não imprime nem o título e a lista simplesmente
+> **desaparece do PDF, sem erro**. Na dúvida, confira se o `thesis.nls` foi
+> criado.
 
 No **Overleaf**: Menu → *Settings* → *Compiler* = **XeLaTeX**; documento
-principal = `thesis.tex`. O Overleaf executa biber automaticamente.
+principal = `thesis.tex`. O Overleaf executa biber automaticamente e também lê o
+`.latexmkrc` do projeto, portanto a lista de siglas e o glossário saem prontos —
+sem etapa manual.
 
 ## Estrutura de arquivos
 
@@ -121,6 +134,7 @@ principal = `thesis.tex`. O Overleaf executa biber automaticamente.
 template/
 ├── thesis.tex            # arquivo principal: opções, metadados, inclusão dos capítulos
 ├── referencias.bib       # base de referências (biblatex)
+├── .latexmkrc            # etapas do build (XeLaTeX, biber, siglas, glossário)
 ├── packages/
 │   ├── ppg.cls           # classe UNIVALI (formatação ABNT) — não precisa editar
 │   └── fonts/            # fontes Arial e Times (TTF)
@@ -160,7 +174,16 @@ O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
 - Numeração progressiva **até o 5º nível** (seção → subseção → … → quinária)
 - `itemize`, `enumerate` e **alíneas** ABNT (`a) b) c)` + subalíneas)
 - Listas de figuras, tabelas, quadros, algoritmos, códigos e **siglas**
-  (siglas/abreviaturas via `\nomenclature[S]{}` / `\nomenclature[A]{}`)
+  — cadastre cada item no preâmbulo com `\nomenclature[A]{p.}{Página}`
+  (abreviaturas) ou `\nomenclature[S]{ABNT}{Associação...}` (siglas); a classe
+  agrupa os dois sob os subtítulos *Abreviaturas* e *Siglas* na lista
+  pré-textual. Alternativa: `\sigla{ABNT}{Associação...}`, que cadastra **e**
+  escreve "Associação... (ABNT)" no ponto do texto (`\sigla*{}{}` só cadastra)
+- **Glossário** pós-textual (opcional, depois das Referências): defina os termos
+  no preâmbulo com `\newword{termo}{definição}` (chaves automáticas `Def.1`,
+  `Def.2`…) e cite-os no texto com `\gls{Def.1}` — ou use `\glsaddall` para
+  listar todos. Só entradas **usadas** são impressas; sem nenhuma, o
+  `\printglossary` não gera página
 
 **Pré e pós-textuais:**
 - Resumo (PT) + *abstract* (EN) com palavras-chave; dedicatória, agradecimentos,
