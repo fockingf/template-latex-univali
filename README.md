@@ -101,7 +101,7 @@ Para mudar o cabeçalho impresso no topo da **capa**, use `\capainstituicao{...}
 Use **XeLaTeX** ou **LuaLaTeX** (não pdfLaTeX — o template usa as fontes Arial e
 Times em `packages/fonts/` via `fontspec`). A bibliografia usa **biber**.
 
-**O jeito mais simples é `latexmk thesis.tex`**: o `.latexmkrc` do template já
+**O jeito mais simples é `latexmk thesis.tex`**: o `latexmkrc` do template já
 seleciona o XeLaTeX e executa biber, a lista de siglas e o glossário nas
 etapas certas.
 
@@ -125,8 +125,11 @@ xelatex thesis
 
 No **Overleaf**: Menu → *Settings* → *Compiler* = **XeLaTeX**; documento
 principal = `thesis.tex`. O Overleaf executa biber automaticamente e também lê o
-`.latexmkrc` do projeto, portanto a lista de siglas e o glossário saem prontos —
-sem etapa manual.
+`latexmkrc` do projeto, portanto a lista de siglas e o glossário saem prontos —
+sem etapa manual. O arquivo é gravado **sem ponto** no nome justamente por causa
+do Overleaf: a interface e a sincronização com o GitHub lidam mal com dotfiles.
+Ele precisa ficar na raiz do projeto, ao lado do `thesis.tex`. Depois de
+adicioná-lo, use *Recompile* → **Clear cached files** na primeira compilação.
 
 ## Estrutura de arquivos
 
@@ -134,7 +137,7 @@ sem etapa manual.
 template/
 ├── thesis.tex            # arquivo principal: opções, metadados, inclusão dos capítulos
 ├── referencias.bib       # base de referências (biblatex)
-├── .latexmkrc            # etapas do build (XeLaTeX, biber, siglas, glossário)
+├── latexmkrc             # etapas do build (XeLaTeX, biber, siglas, glossário)
 ├── packages/
 │   ├── ppg.cls           # classe UNIVALI (formatação ABNT) — não precisa editar
 │   └── fonts/            # fontes Arial e Times (TTF)
