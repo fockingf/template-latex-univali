@@ -27,6 +27,7 @@
 *.acn
 *.acr
 *.alg
+*.glsdefs
 *.idx
 *.ind
 *.xdy

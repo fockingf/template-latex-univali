@@ -150,14 +150,19 @@
 \RequirePackage{mathptmx}       % Usando times para equações, opcional
 \RequirePackage{listings}       % Pacote para formatação de diversos códigos fontes
 \RequirePackage{algorithm, algpseudocode}  % Pacote para escrever algoritmos em pseudo-codigo
-\RequirePackage{nomencl}        % Pacote para criacao da Lista de Siglas
+% nomencl: carregado apenas para compatibilidade da API (\nomenclature,
+% \printnomenclature), que a classe redefine mais abaixo. O motor da lista de
+% abreviaturas e siglas e o <glossaries>, para que as siglas fiquem clicaveis.
+\RequirePackage{nomencl}
 % Evita "Package tracklang Warning: No `datatool' support for dialect ...": o
 % glossaries carrega o datatool-base, que tenta carregar locales para cada
 % dialeto do babel rastreado (spanish, brazil...), inexistentes no datatool.
 % Nao usamos formatacao numerica/locale do datatool, entao nolocale desliga
 % esse carregamento e silencia os avisos sem perda de funcionalidade.
 \PassOptionsToPackage{nolocale}{datatool-base}
-\RequirePackage[noredefwarn,translate=false,nonumberlist,style=list,toc]{glossaries}
+% A opcao <acronym> cria um glossario proprio para as siglas (\acronymtype),
+% separado do <main>, que fica com o Glossario pos-textual (\newword).
+\RequirePackage[noredefwarn,translate=false,nonumberlist,style=list,toc,acronym]{glossaries}
 % backref removido: incompatível com biblatex (NBR 6023:2025)
 \RequirePackage{float}          % Pacote para criação de novos ambientes
 % Bibliografia: biblatex-abnt (NBR 6023:2025 — cobertura completa)
@@ -426,44 +431,91 @@
 % Pacote para criação da lista de siglas e abreviaturas
 %===================================================================
 
-% Configuracao do pacote nomencl
-% Tamanho da Label da sigla
-\setlength{\nomlabelwidth}{0.15\hsize} 
-% Separa as abreviaturas de suas definições com pontos (....)
-\renewcommand{\nomlabel}[1]{#1 \hfill}
-\setlength{\nomitemsep}{-.05in} 
-% Comando necessário para a criação da lista de abreviaturas
-\makenomenclature
-% Traduz o titulo da lista de abreviaturas
+% O MOTOR desta lista e o pacote <glossaries> (acronimos), NAO o <nomencl>.
+% Motivo: o nomencl e um pacote estilo indice — grava as entradas num arquivo,
+% o makeindex ordena e a lista sai como texto puro, SEM ancora e SEM link. Com
+% o glossaries, cada mencao no texto vira hyperlink para a entrada na lista, e
+% a primeira mencao expande sozinha para "nome completo (SIGLA)", que e
+% exatamente o que a NBR 14724:2024, 5.6 pede. O nomencl continua carregado
+% apenas para os comandos dele existirem (compatibilidade); \makenomenclature
+% NAO e chamado, portanto nenhum .nlo e gravado.
+%
+% FACHADA COMPATIVEL — a API antiga continua valendo:
+%   \nomenclature[A]{ed.}{Edicao}          (preambulo, como sempre)
+%   \nomenclature[S]{ABNT}{Associacao...}
+%   \sigla{IBGE}{Instituto...}             (no texto: escreve e cadastra)
+%   \sigla*{IBGE}{Instituto...}            (so cadastra)
+%   \printnomenclature                      (imprime a lista)
+% O \sigla pode ser chamado no MEIO do texto: o glossaries grava as definicoes
+% feitas no corpo em thesis.glsdefs e as le na passada seguinte, e por isso que
+% a sigla cadastrada num capitulo aparece na lista pre-textual, que vem antes.
+% Consequencia pratica: uma sigla nova so entra na lista apos duas passadas.
+% A CHAVE da entrada e a propria sigla, entao as mencoes seguintes sao
+% \gls{ABNT} — que imprime "ABNT" com link para a lista. Use apenas letras,
+% digitos, ponto e hifen na sigla: a chave vai para o glossaries, que nao
+% aceita caracteres especiais de LaTeX (& % # ...) em rotulos.
 \renewcommand{\nomname}{\listadesiglasname}
 
-% Subtitulos dos grupos dentro da lista: \nomenclature[A]{} = abreviaturas,
-% \nomenclature[S]{} = siglas. Sem isso os prefixos A/S servem apenas como
-% chave de ordenacao e a lista sai numa sequencia corrida, sem separacao
-% visivel. Qualquer outro prefixo (ou nenhum) nao gera subtitulo.
-\newcommand{\@nomgroupsep}{}
-\renewcommand{\nomgroup}[1]{%
-  \ifstrequal{#1}{A}{\@nomgroupsep\item[\bfseries Abreviaturas]%
-                     \gdef\@nomgroupsep{\bigskip}}{%
-  \ifstrequal{#1}{S}{\@nomgroupsep\item[\bfseries Siglas]%
-                     \gdef\@nomgroupsep{\bigskip}}{}}%
+% Registro de uma entrada. #1 = grupo (A ou S), #2 = sigla, #3 = significado.
+% A chave de ordenacao comeca pela letra do grupo, e o glossaries agrupa pela
+% primeira letra dessa chave — e assim que os subtitulos abaixo aparecem.
+% O \ifglsentryexists evita erro quando a mesma sigla e registrada duas vezes
+% (ex.: \nomenclature no preambulo e \sigla no texto); com o nomencl isso era
+% inofensivo, com o glossaries seria "entry already defined".
+\newcommand{\ppg@siglaregister}[3]{%
+  \ifglsentryexists{#2}{}{\newacronym[sort={#1 #2}]{#2}{#2}{#3}}%
+}
+\renewcommand{\nomenclature}[3][S]{\ppg@siglaregister{#1}{#2}{#3}}
+
+% Subtitulos dos grupos: [A] = abreviaturas, [S] = siglas. Qualquer outro
+% prefixo entra na lista sem subtitulo. Ficam num comando proprio (e nao
+% inline no estilo) para nao precisar duplicar o # dentro do \newglossarystyle.
+\newcommand{\ppg@siglagroupsep}{}
+\newcommand{\ppg@siglagroup}[1]{%
+  \ifstrequal{#1}{A}{\ppg@siglagroupsep\item[\bfseries Abreviaturas]%
+                     \gdef\ppg@siglagroupsep{\bigskip}}{%
+  \ifstrequal{#1}{S}{\ppg@siglagroupsep\item[\bfseries Siglas]%
+                     \gdef\ppg@siglagroupsep{\bigskip}}{}}%
+}
+\newcommand{\ppg@siglalabel}[1]{#1\hfill}
+
+% Estilo da lista: sigla numa coluna de largura fixa, significado ao lado —
+% mesmo desenho que o nomencl produzia. O \glsgroupheading e redefinido AQUI
+% (dentro do estilo), e nao globalmente, para nao afetar as letras-cabecalho do
+% Glossario pos-textual, que usa o estilo padrao.
+\newglossarystyle{ppgsiglas}{%
+  \renewenvironment{theglossary}%
+    {\begin{list}{}{%
+       \setlength{\labelwidth}{0.15\hsize}%
+       \setlength{\labelsep}{0pt}%
+       \setlength{\leftmargin}{\labelwidth}%
+       \setlength{\itemsep}{0pt}%
+       \setlength{\parsep}{0pt}%
+       \let\makelabel\ppg@siglalabel}}%
+    {\end{list}}%
+  \renewcommand*{\glossaryheader}{}%
+  \renewcommand*{\glsgroupheading}{\ppg@siglagroup}%
+  \renewcommand*{\glsgroupskip}{}%
+  \renewcommand*{\glossentry}[2]{%
+    \item[\glstarget{##1}{\glossentryname{##1}}]\glossentrydesc{##1}}%
 }
 
-% Comando para criacao de abreviaturas e siglas, usado DENTRO do texto.
-%   \sigla{IBGE}{Instituto Brasileiro...}  -> escreve "Instituto Brasileiro...
-%       (IBGE)" no ponto do texto e cadastra na lista (NBR 14724:2024, 5.6: na
-%       primeira mencao, a sigla vem entre parenteses, precedida pelo nome
-%       completo)
-%   \sigla*{IBGE}{Instituto Brasileiro...} -> so cadastra, nao escreve nada
-%   \sigla[A]{...}{...} -> registra no grupo A (abreviaturas); o grupo padrao
-%       e S (siglas), para que a entrada caia sob o subtitulo correto de
-%       \nomgroup acima. Sem esse prefixo a entrada ficaria fora dos dois
-%       grupos, ordenada antes deles e sem subtitulo.
+% Imprime a lista (fachada do \printnomenclature, que aceitava um argumento
+% opcional de largura — ignorado aqui, a largura vem do estilo acima).
+\newcommand{\ppg@printsiglas}{%
+  \printglossary[type=\acronymtype,style=ppgsiglas,title=\listadesiglasname]%
+}
+\renewcommand{\printnomenclature}[1][]{\ppg@printsiglas}
+
+% Comando para citar a sigla DENTRO do texto.
+%   \sigla{IBGE}{Instituto Brasileiro...} -> cadastra e escreve "Instituto
+%       Brasileiro... (IBGE)" com link para a lista (NBR 14724:2024, 5.6).
+%       Nas mencoes seguintes use \gls{IBGE}, que sai "IBGE", tambem com link.
+%   \sigla*{IBGE}{Instituto Brasileiro...} -> so cadastra, nao escreve nada.
+%   \sigla[A]{...}{...} -> grupo A (abreviaturas); o padrao e S (siglas).
 \newcommand{\sigla}{\@ifstar\@siglaonly\@siglainline}
-% Apenas faz o registro na tabela de siglas
-\newcommand{\@siglaonly}[3][S]{\nomenclature[#1]{#2}{#3}}
-% Faz o registro na tabela de siglas e insere os dados no corpo do documento
-\newcommand{\@siglainline}[3][S]{#3 (#2)\nomenclature[#1]{#2}{#3}}
+\newcommand{\@siglaonly}[3][S]{\ppg@siglaregister{#1}{#2}{#3}}
+\newcommand{\@siglainline}[3][S]{\ppg@siglaregister{#1}{#2}{#3}\gls{#2}}
 
 
 %===================================================================
@@ -1315,7 +1367,21 @@
 {
   \@ifundefined{@incluilistadesiglas}{}{
     \pdfbookmark[0]{\listadesiglasname}{listadesiglas}
-    \printnomenclature
+    % A opcao <toc> do glossaries poria esta lista no sumario, mas elemento
+    % pre-textual NAO entra no sumario (NBR 14724:2024, 4.2.1). O interruptor
+    % \glstocfalse (do proprio glossaries) desliga isso so aqui; em seguida
+    % volta a valer, para o Glossario pos-textual continuar listado.
+    % Obs.: o ambiente KeepFromToc, usado nas outras listas, nao contem o
+    % glossaries — ele escapa pelo \@gls@toc.
+    \glstocfalse
+    \ppg@printsiglas
+    \glstoctrue
+    % Inclui na lista TODAS as siglas cadastradas, mesmo as que o autor
+    % registrou apenas no preambulo e nunca citou com \gls — e o comportamento
+    % que o nomencl tinha. O \glsresetall em seguida desmarca o "primeiro uso",
+    % senao a primeira mencao no texto sairia sem expandir o nome completo.
+    \glsaddall[types={\acronymtype}]%
+    \glsresetall[\acronymtype]%
     \cleardoublepage
   }
 }

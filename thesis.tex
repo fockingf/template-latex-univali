@@ -159,7 +159,14 @@ method, main results, and conclusion.]
 % =====================================================================
 % LISTA DE ABREVIATURAS (grupo A) E SIGLAS (grupo S)
 % Cadastre aqui cada sigla com \nomenclature; ela aparece automaticamente
-% na "Lista de siglas". Exemplos abaixo — substitua pelos seus.
+% na "Lista de abreviaturas e siglas", agrupada por A ou S. Exemplos abaixo —
+% substitua pelos seus.
+%
+% A CHAVE da entrada é a própria sigla, então no texto escreva \gls{ABNT}: sai
+% "ABNT" com link para a entrada na lista, e na PRIMEIRA vez expande sozinho
+% para "Associação Brasileira de Normas Técnicas (ABNT)", como pede a NBR
+% 14724:2024, 5.6. Para cadastrar já na primeira menção, sem passar por aqui,
+% use \sigla{}{} dentro do capítulo (ver tex/fundamentacao-teorica.tex).
 % =====================================================================
 \nomenclature[A]{ed.}{Edição}
 \nomenclature[A]{p.}{Página}

@@ -15,12 +15,15 @@ minim veniam, quis nostrud exercitation ullamco laboris.
 % nome completo" — ex.: Associação Brasileira de Normas Técnicas (ABNT). O
 % \sigla{}{} faz as duas coisas de uma vez: escreve "nome completo (SIGLA)" aqui
 % e cadastra a entrada na lista de abreviaturas e siglas (pré-textual), sem
-% precisar repetir o \nomenclature no preâmbulo. Nas menções seguintes, use só a
-% sigla. Variações: \sigla*{}{} apenas cadastra (não escreve nada no texto) e
+% precisar repetir o \nomenclature no preâmbulo.
+% Nas menções SEGUINTES, use \gls{IBGE}: sai apenas "IBGE", e tanto ele quanto a
+% primeira menção ficam com link para a entrada na lista. Se você digitar a sigla
+% como texto puro, ela aparece igual no PDF, mas sem link.
+% Variações: \sigla*{}{} apenas cadastra (não escreve nada no texto) e
 % \sigla[A]{}{} manda a entrada para o grupo "Abreviaturas" em vez de "Siglas".
 Os dados populacionais utilizados nesta seção provêm do
-\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}. Nas próximas
-citações, basta escrever IBGE, sem repetir o nome completo.
+\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}. As séries
+históricas do \gls{IBGE} cobrem o período analisado.
 
 %-------------------------------------------------------------
 \section{Primeiro conceito}

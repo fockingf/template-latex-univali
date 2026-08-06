@@ -95,8 +95,8 @@ Para mudar o cabeçalho impresso no topo da **capa**, use `\capainstituicao{...}
 
 **Pré-requisitos (build local):** uma distribuição TeX recente — **TeX Live**
 (Linux/macOS/Windows) ou **MiKTeX** (Windows) — que inclua `xelatex`, `biber`,
-`makeindex`, `makeglossaries` e, opcionalmente, `latexmk`. Quem compila no
-**Overleaf** não precisa instalar nada (veja abaixo).
+`makeglossaries` e, opcionalmente, `latexmk`. Quem compila no **Overleaf** não
+precisa instalar nada (veja abaixo).
 
 Use **XeLaTeX** ou **LuaLaTeX** (não pdfLaTeX — o template usa as fontes Arial e
 Times em `packages/fonts/` via `fontspec`). A bibliografia usa **biber**.
@@ -109,19 +109,16 @@ etapas certas.
 
 ```sh
 xelatex thesis
-biber thesis                                    # referências
-makeindex -s nomencl.ist -o thesis.nls thesis.nlo   # lista de abreviaturas e siglas
-makeglossaries thesis                           # glossário (só se usar \newword)
+biber thesis            # referências
+makeglossaries thesis   # lista de abreviaturas e siglas + glossário
 xelatex thesis
 xelatex thesis
 ```
 
-> **Atenção:** a lista de abreviaturas e siglas vem do pacote `nomencl` e é
-> gerada por **`makeindex` com o estilo `nomencl.ist`** — *não* por
-> `makeglossaries`, que cuida apenas do glossário pós-textual. Se essa etapa não
-> rodar, `\printnomenclature` não imprime nem o título e a lista simplesmente
-> **desaparece do PDF, sem erro**. Na dúvida, confira se o `thesis.nls` foi
-> criado.
+> **Atenção:** sem o `makeglossaries`, a lista de abreviaturas e siglas
+> **desaparece do PDF sem erro nenhum** — o `\printglossary` não imprime nem o
+> título. Na dúvida, confira se o `thesis.acr` foi criado (é ele que contém a
+> lista; o `thesis.gls` é o glossário pós-textual).
 
 No **Overleaf**: Menu → *Settings* → *Compiler* = **XeLaTeX**; documento
 principal = `thesis.tex`. O Overleaf executa biber automaticamente e também lê o
@@ -188,6 +185,10 @@ O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
   menção, a sigla vem entre parênteses precedida do nome completo) — demonstrado
   em `tex/fundamentacao-teorica.tex`. `\sigla*{}{}` só cadastra; `\sigla[A]{}{}`
   manda a entrada para o grupo *Abreviaturas* (o padrão é *Siglas*)
+- **Siglas clicáveis:** a chave da entrada é a própria sigla, então nas menções
+  seguintes escreva `\gls{IBGE}` — sai apenas "IBGE", com **link para a entrada na
+  lista**. Vale também para a primeira menção feita com `\sigla{}{}`. Sigla
+  digitada como texto puro aparece igual no PDF, mas sem link
 - **Glossário** pós-textual (opcional, depois das Referências): defina os termos
   no preâmbulo com `\newword{termo}{definição}` (chaves automáticas `Def.1`,
   `Def.2`…) e cite-os no texto com `\gls{Def.1}` — ou use `\glsaddall` para
