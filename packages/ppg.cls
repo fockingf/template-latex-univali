@@ -449,12 +449,21 @@
                      \gdef\@nomgroupsep{\bigskip}}{}}%
 }
 
-% Comando para criação de abreviaturas e siglas
-\def\sigla{\@ifstar\@sigla\@@sigla}
+% Comando para criacao de abreviaturas e siglas, usado DENTRO do texto.
+%   \sigla{IBGE}{Instituto Brasileiro...}  -> escreve "Instituto Brasileiro...
+%       (IBGE)" no ponto do texto e cadastra na lista (NBR 14724:2024, 5.6: na
+%       primeira mencao, a sigla vem entre parenteses, precedida pelo nome
+%       completo)
+%   \sigla*{IBGE}{Instituto Brasileiro...} -> so cadastra, nao escreve nada
+%   \sigla[A]{...}{...} -> registra no grupo A (abreviaturas); o grupo padrao
+%       e S (siglas), para que a entrada caia sob o subtitulo correto de
+%       \nomgroup acima. Sem esse prefixo a entrada ficaria fora dos dois
+%       grupos, ordenada antes deles e sem subtitulo.
+\newcommand{\sigla}{\@ifstar\@siglaonly\@siglainline}
 % Apenas faz o registro na tabela de siglas
-\def\@sigla#1#2{\nomenclature{#1}{#2}}          % \sigla*{}{} 
+\newcommand{\@siglaonly}[3][S]{\nomenclature[#1]{#2}{#3}}
 % Faz o registro na tabela de siglas e insere os dados no corpo do documento
-\def\@@sigla#1#2{#2 (#1)\nomenclature{#1}{#2}}  % \sigla{}{}
+\newcommand{\@siglainline}[3][S]{#3 (#2)\nomenclature[#1]{#2}{#3}}
 
 
 %===================================================================

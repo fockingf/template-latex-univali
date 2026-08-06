@@ -2,13 +2,25 @@
 % FUNDAMENTAÇÃO TEÓRICA (Referencial Teórico)
 % Reúna os conceitos necessários para o leitor compreender o trabalho.
 % Este capítulo demonstra: citação (indireta, direta curta com \enquote, direta
-% longa com o ambiente citacao, grifo nosso, supressão [...] e apud), nota de
-% rodapé, figura, equação, alíneas (ABNT) e listas.
+% longa com o ambiente citacao, grifo nosso, supressão [...] e apud), sigla na
+% primeira menção, nota de rodapé, figura, equação, alíneas (ABNT) e listas.
 % =====================================================================
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua~\parencite{exemplo-livro}. Ut enim ad
 minim veniam, quis nostrud exercitation ullamco laboris.
+
+% SIGLA na PRIMEIRA menção (NBR 14724:2024, 5.6): "A sigla, quando mencionada
+% pela primeira vez no texto, deve ser indicada entre parênteses, precedida pelo
+% nome completo" — ex.: Associação Brasileira de Normas Técnicas (ABNT). O
+% \sigla{}{} faz as duas coisas de uma vez: escreve "nome completo (SIGLA)" aqui
+% e cadastra a entrada na lista de abreviaturas e siglas (pré-textual), sem
+% precisar repetir o \nomenclature no preâmbulo. Nas menções seguintes, use só a
+% sigla. Variações: \sigla*{}{} apenas cadastra (não escreve nada no texto) e
+% \sigla[A]{}{} manda a entrada para o grupo "Abreviaturas" em vez de "Siglas".
+Os dados populacionais utilizados nesta seção provêm do
+\sigla{IBGE}{Instituto Brasileiro de Geografia e Estatística}. Nas próximas
+citações, basta escrever IBGE, sem repetir o nome completo.
 
 %-------------------------------------------------------------
 \section{Primeiro conceito}

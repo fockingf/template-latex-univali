@@ -163,6 +163,8 @@ O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
   espaço simples, sem aspas)
 - `grifo nosso`, supressão `[...]` e `apud` (citação de citação)
 - Nota de rodapé (`\footnote`)
+- **Sigla na primeira menção** (`\sigla{}{}`, NBR 14724:2024, 5.6) — escreve o nome
+  completo com a sigla entre parênteses e já a cadastra na lista pré-textual
 
 **Ilustrações, tabelas e código** — legenda acima, fonte abaixo (ver seção própria):
 - Figura (com placeholder `\figuraplaceholder`) e gráfico `pgfplots`
@@ -177,8 +179,12 @@ O texto de exemplo já traz, pronto para copiar, os principais elementos ABNT:
   — cadastre cada item no preâmbulo com `\nomenclature[A]{p.}{Página}`
   (abreviaturas) ou `\nomenclature[S]{ABNT}{Associação...}` (siglas); a classe
   agrupa os dois sob os subtítulos *Abreviaturas* e *Siglas* na lista
-  pré-textual. Alternativa: `\sigla{ABNT}{Associação...}`, que cadastra **e**
-  escreve "Associação... (ABNT)" no ponto do texto (`\sigla*{}{}` só cadastra)
+  pré-textual. Alternativa para usar **dentro do texto**:
+  `\sigla{IBGE}{Instituto Brasileiro...}` cadastra **e** escreve "Instituto
+  Brasileiro... (IBGE)" ali mesmo, atendendo à NBR 14724:2024, 5.6 (na primeira
+  menção, a sigla vem entre parênteses precedida do nome completo) — demonstrado
+  em `tex/fundamentacao-teorica.tex`. `\sigla*{}{}` só cadastra; `\sigla[A]{}{}`
+  manda a entrada para o grupo *Abreviaturas* (o padrão é *Siglas*)
 - **Glossário** pós-textual (opcional, depois das Referências): defina os termos
   no preâmbulo com `\newword{termo}{definição}` (chaves automáticas `Def.1`,
   `Def.2`…) e cite-os no texto com `\gls{Def.1}` — ou use `\glsaddall` para
