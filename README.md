@@ -138,9 +138,13 @@ nome completo e defina a área e a especialidade você mesmo:
 \especialidade{em Ciência da Computação}   % completa "...título de Bacharel em Ciência da Computação"
 ```
 
-Para mudar o cabeçalho impresso no topo da **capa**, use `\capainstituicao{...}`
-(opcional; só é necessário se não usar o PPGCA). A cidade da capa/folha de rosto
-é definida com `\local{...}`.
+O cabeçalho no topo da **capa** acompanha esse `\curso{}` automaticamente: com o
+PPGCA sai o bloco do programa, e com qualquer outro nome sai
+`UNIVERSIDADE DO VALE DO ITAJAÍ` seguida do curso informado (em maiúsculas).
+Só use `\capainstituicao{...}` se quiser um cabeçalho **diferente** desse — por
+exemplo incluindo o Centro; ele substitui o bloco inteiro e não converte a caixa,
+então digite em maiúsculas. A cidade da capa/folha de rosto é definida com
+`\local{...}`.
 
 ## Compilação
 

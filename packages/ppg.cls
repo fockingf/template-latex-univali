@@ -698,15 +698,42 @@
 \providecommand{\imprimiruniversidade}{}
 \newcommand{\universidade}[1]{\renewcommand{\imprimiruniversidade}{#1}}
 
-% Cabeçalho da instituição impresso no TOPO da CAPA (várias linhas, será
-% exibido em maiúsculas/negrito). Redefina no preâmbulo com \capainstituicao{}.
-% Útil para TCC/monografia (ex.: nome do Curso de Graduação em vez do PPG).
-\providecommand{\imprimircapainstituicao}{%
-  UNIVERSIDADE DO VALE DO ITAJA\'I\\[6pt]
-  ~\\[6pt]
-  PROGRAMA DE P\'OS-GRADUA\c{C}\~AO EM\\
-  COMPUTA\c{C}\~AO APLICADA~(\imprimirsiglaprograma)}
+% Cabeçalho da instituição impresso no TOPO da CAPA (Apêndice A do guia: várias
+% linhas, centradas, em NEGRITO). Redefina no preâmbulo com \capainstituicao{}.
+%
+% O padrão ACOMPANHA O \curso{}, e é resolvido só na hora de compor a capa (não
+% no carregamento da classe), porque \curso{} roda depois, no preâmbulo, e o
+% \capainstituicao{} do usuário pode vir ANTES ou DEPOIS dele:
+%   \curso{PPGC} (ou o fallback do fim do preâmbulo) -> bloco do PPGCA;
+%   \curso{<texto livre>}  -> universidade + esse texto (TCC/monografia/outros);
+%   \capainstituicao{...}  -> sobrepõe o padrão, em qualquer ordem.
+% Sem isso, um TCC com \curso{} livre saía com a capa do programa de pós — e com
+% um "()" vazio, já que \imprimirsiglaprograma só recebe valor no ramo do PPGCA.
+\providecommand{\imprimircapainstituicao}{\ppg@capainstituicaopadrao}
 \newcommand{\capainstituicao}[1]{\renewcommand{\imprimircapainstituicao}{#1}}
+
+% Nome livre informado em \curso{} (vazio quando o curso é o PPGCA).
+\newcommand{\ppg@cursonome}{}
+
+% Universidade no topo da capa, comum aos dois ramos do padrão.
+\newcommand{\ppg@capauniversidade}{%
+  UNIVERSIDADE DO VALE DO ITAJA\'I\\[6pt]
+  ~\\[6pt]}
+
+\newcommand{\ppg@capainstituicaopadrao}{%
+  \ppg@capauniversidade
+  \ifx\ppg@cursonome\@empty
+    % PPGCA: nome do programa. Os parênteses só saem se a sigla existir —
+    % senão a capa imprimiria um "()" vazio, sem aviso nenhum.
+    PROGRAMA DE P\'OS-GRADUA\c{C}\~AO EM\\
+    COMPUTA\c{C}\~AO APLICADA%
+    \ifx\imprimirsiglaprograma\@empty\else~(\imprimirsiglaprograma)\fi
+  \else
+    % Outros cursos: o nome informado em \curso{}. Em maiúsculas porque a capa
+    % não aplica \MakeUppercase ao cabeçalho (o bloco do PPGCA já vem digitado
+    % em caixa alta) e o Apêndice A pede a identificação em letras maiúsculas.
+    \MakeUppercase{\ppg@cursonome}%
+  \fi}
 
 % Sinaliza se o usuário chamou \curso{} explicitamente (evita que o curso
 % padrão PPGC sobrescreva \area/\especialidade definidos manualmente).
@@ -727,6 +754,8 @@
 
 % PPGC ===========================================================
     \ifthenelse{\equal{#1}{PPGC}}{
+        % capa: bloco do PPGCA (ver \ppg@capainstituicaopadrao)
+        \renewcommand{\ppg@cursonome}{}
         \addto\captionsbrazil{
             \area{Sistemas Embarcados e Distribuídos} %Sistemas Inteligentes e Educacionais
             \programa{PPGCA}{Programa de P{\'o}s-Gradua{\c c}{\~a}o em Computação Aplicada}
@@ -742,6 +771,9 @@
 % Qualquer outro valor é tratado como o NOME da instituição/curso a ser
 % impresso no preâmbulo (ex.: \curso{Curso de Ciência da Computação -- UNIVALI}).
 % Defina você mesmo \area{} e \especialidade{} no preâmbulo (thesis.tex).
+% O mesmo texto passa a encabeçar a CAPA, abaixo da universidade, no lugar do
+% bloco do PPGCA (ver \ppg@capainstituicaopadrao).
+        \renewcommand{\ppg@cursonome}{#1}
         \addto\captionsbrazil{\instituicao{#1}}
         \addto\captionsenglish{\instituicao{#1}}
                     }
