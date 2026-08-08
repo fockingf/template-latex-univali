@@ -704,35 +704,35 @@
 % O padrão ACOMPANHA O \curso{}, e é resolvido só na hora de compor a capa (não
 % no carregamento da classe), porque \curso{} roda depois, no preâmbulo, e o
 % \capainstituicao{} do usuário pode vir ANTES ou DEPOIS dele:
-%   \curso{PPGC} (ou o fallback do fim do preâmbulo) -> bloco do PPGCA;
-%   \curso{<texto livre>}  -> universidade + esse texto (TCC/monografia/outros);
+%   \curso{PPGC} (ou o fallback do fim do preâmbulo) -> universidade + o bloco
+%                do programa de pós;
+%   \curso{<texto livre>}  -> só a instituição, como no Apêndice A do guia
+%                (TCC/monografia/outros cursos);
 %   \capainstituicao{...}  -> sobrepõe o padrão, em qualquer ordem.
 % Sem isso, um TCC com \curso{} livre saía com a capa do programa de pós — e com
 % um "()" vazio, já que \imprimirsiglaprograma só recebe valor no ramo do PPGCA.
+%
+% O nome do CURSO não entra na capa: o Apêndice A pede só o "nome da instituição"
+% (o exemplo do guia traz "UNIVERSIDADE DO VALE DO ITAJAÍ" sozinho). O curso é
+% elemento da nota de natureza, na folha de rosto (Apêndice B). Quem quiser o
+% Centro/Curso na capa declara \capainstituicao{}.
 \providecommand{\imprimircapainstituicao}{\ppg@capainstituicaopadrao}
 \newcommand{\capainstituicao}[1]{\renewcommand{\imprimircapainstituicao}{#1}}
 
-% Nome livre informado em \curso{} (vazio quando o curso é o PPGCA).
-\newcommand{\ppg@cursonome}{}
-
-% Universidade no topo da capa, comum aos dois ramos do padrão.
-\newcommand{\ppg@capauniversidade}{%
-  UNIVERSIDADE DO VALE DO ITAJA\'I\\[6pt]
-  ~\\[6pt]}
+% Sinaliza que \curso{} recebeu um nome livre (curso fora do PPGCA).
+\newif\if@ppgCursoLivre\@ppgCursoLivrefalse
 
 \newcommand{\ppg@capainstituicaopadrao}{%
-  \ppg@capauniversidade
-  \ifx\ppg@cursonome\@empty
-    % PPGCA: nome do programa. Os parênteses só saem se a sigla existir —
-    % senão a capa imprimiria um "()" vazio, sem aviso nenhum.
+  UNIVERSIDADE DO VALE DO ITAJA\'I%
+  \if@ppgCursoLivre\else
+    % PPGCA: acrescenta o nome do programa (prática do programa, além do modelo
+    % do Apêndice A). Os parênteses da sigla só saem se a sigla existir — senão
+    % a capa imprimiria um "()" vazio, sem aviso nenhum.
+    \\[6pt]
+    ~\\[6pt]
     PROGRAMA DE P\'OS-GRADUA\c{C}\~AO EM\\
     COMPUTA\c{C}\~AO APLICADA%
     \ifx\imprimirsiglaprograma\@empty\else~(\imprimirsiglaprograma)\fi
-  \else
-    % Outros cursos: o nome informado em \curso{}. Em maiúsculas porque a capa
-    % não aplica \MakeUppercase ao cabeçalho (o bloco do PPGCA já vem digitado
-    % em caixa alta) e o Apêndice A pede a identificação em letras maiúsculas.
-    \MakeUppercase{\ppg@cursonome}%
   \fi}
 
 % Sinaliza se o usuário chamou \curso{} explicitamente (evita que o curso
@@ -754,8 +754,8 @@
 
 % PPGC ===========================================================
     \ifthenelse{\equal{#1}{PPGC}}{
-        % capa: bloco do PPGCA (ver \ppg@capainstituicaopadrao)
-        \renewcommand{\ppg@cursonome}{}
+        % capa: universidade + bloco do PPGCA (ver \ppg@capainstituicaopadrao)
+        \@ppgCursoLivrefalse
         \addto\captionsbrazil{
             \area{Sistemas Embarcados e Distribuídos} %Sistemas Inteligentes e Educacionais
             \programa{PPGCA}{Programa de P{\'o}s-Gradua{\c c}{\~a}o em Computação Aplicada}
@@ -771,9 +771,10 @@
 % Qualquer outro valor é tratado como o NOME da instituição/curso a ser
 % impresso no preâmbulo (ex.: \curso{Curso de Ciência da Computação -- UNIVALI}).
 % Defina você mesmo \area{} e \especialidade{} no preâmbulo (thesis.tex).
-% O mesmo texto passa a encabeçar a CAPA, abaixo da universidade, no lugar do
-% bloco do PPGCA (ver \ppg@capainstituicaopadrao).
-        \renewcommand{\ppg@cursonome}{#1}
+% Na CAPA, o bloco do programa de pós dá lugar só à instituição, como no
+% Apêndice A do guia (ver \ppg@capainstituicaopadrao); o curso aparece na nota de
+% natureza da folha de rosto, que é onde o Apêndice B o coloca.
+        \@ppgCursoLivretrue
         \addto\captionsbrazil{\instituicao{#1}}
         \addto\captionsenglish{\instituicao{#1}}
                     }
