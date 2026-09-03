@@ -62,6 +62,39 @@ de siglas) passou para depois das Referências, onde a norma manda; e o rótulo 
 sigla virou chave interna, então use apenas letras, dígitos, ponto e hífen —
 evite `&`, `%`, `#`.
 
+## Baixar e usar no Overleaf (sem GitHub)
+
+Não é preciso ter conta no GitHub nem sincronizar nada: baixe o `.zip` pronto e suba
+como projeto novo no Overleaf.
+
+1. **Baixe o `template-univali.zip`** —
+   [download direto](https://github.com/fockingf/template-latex-univali/releases/latest/download/template-univali.zip)
+   ou pela página de
+   [Releases](https://github.com/fockingf/template-latex-univali/releases/latest),
+   em *Assets*.
+2. No Overleaf: **New Project → Upload Project** e escolha o `.zip` baixado.
+3. **Menu → Settings → Compiler = XeLaTeX.** O padrão do Overleaf é pdfLaTeX, que
+   **não** compila este template (as fontes vêm de `packages/fonts/` via `fontspec`).
+4. Confira que *Main document* é o `thesis.tex`.
+5. **Recompile** — na primeira vez use *Recompile* → **Clear cached files**.
+
+Pronto: o Overleaf executa o `biber` e o `makeglossaries` sozinho, porque o `.zip` do
+release já traz os arquivos na **raiz** — `thesis.tex` e `latexmkrc` no nível de cima,
+sem pasta embrulhando tudo. Isso não é detalhe: o Overleaf só lê o `latexmkrc` se ele
+estiver na raiz do projeto, e é ele que dispara essas etapas. Sem elas, a lista de
+abreviaturas e siglas **desaparece do PDF sem erro nenhum** (veja "Compilação").
+
+> **Se você baixar pelo botão verde *Code → Download ZIP*** em vez do release: aquele
+> arquivo embrulha tudo numa pasta `template-latex-univali-main/`. Se o projeto no
+> Overleaf ficar com essa pasta em vez dos arquivos soltos, mova o conteúdo dela para a
+> raiz do projeto antes de compilar — ou re-compacte selecionando os **arquivos**, não a
+> pasta.
+
+**Para atualizar depois:** baixe o release mais novo, crie um projeto novo a partir dele
+e traga do projeto antigo o que é seu — `tex/`, `imagens/`, `referencias.bib` e os
+metadados do topo do `thesis.tex`. O que muda de uma versão para outra é o
+`packages/ppg.cls` e o `latexmkrc`.
+
 ## Como começar
 
 1. **Escolha o tipo de trabalho** na primeira linha de `thesis.tex`, na opção do
@@ -187,6 +220,8 @@ sem etapa manual. O arquivo é gravado **sem ponto** no nome justamente por caus
 do Overleaf: a interface e a sincronização com o GitHub lidam mal com dotfiles.
 Ele precisa ficar na raiz do projeto, ao lado do `thesis.tex`. Depois de
 adicioná-lo, use *Recompile* → **Clear cached files** na primeira compilação.
+Para subir o template no Overleaf sem passar pelo GitHub, veja
+"[Baixar e usar no Overleaf (sem GitHub)](#baixar-e-usar-no-overleaf-sem-github)".
 
 ## Estrutura de arquivos
 
